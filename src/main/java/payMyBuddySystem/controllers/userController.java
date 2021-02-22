@@ -25,7 +25,7 @@ import payMyBuddySystem.services.UserServices;
 public class userController {
 	@Autowired
 	UserServices userServices;
-
+ 
 	@PostMapping(value = "/create")
 	public ResponseEntity<User> createUser(@RequestBody User user) throws Exception {
 		User newUser = null;
@@ -33,9 +33,9 @@ public class userController {
 		System.out.println(result);
 		if (result) {
 
-			return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+			return new ResponseEntity<>(user ,HttpStatus.CREATED);
 		} else {
-			return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(null,HttpStatus.BAD_REQUEST);
 		}
 
 	}
@@ -45,7 +45,6 @@ public class userController {
 		User newUser = null;
 		boolean result = userServices.updateUser(u);
 		if (result) {
-
 			return new ResponseEntity<>(newUser, HttpStatus.CREATED);
 		} else {
 			return new ResponseEntity<>(newUser, HttpStatus.BAD_REQUEST);

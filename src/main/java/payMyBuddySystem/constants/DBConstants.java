@@ -2,13 +2,13 @@ package payMyBuddySystem.constants;
 
 public class DBConstants {
 	//Users
-		public static final String SAVE_USER = "INSERT INTO users(mail,mdp,balance,step) VALUES(?,?,?,?)";
-		public static final String READ_USER_BY_ID = "SELECT idUser,mail,balance,step FROM users WHERE idUser = ? ";
-		public static final String UPDATE_USER = "UPDATE users set mail= ?, balance =? ,step = ? where idUser=?  ";
+		public static final String SAVE_USER = "INSERT INTO users(username,password,balance,step) VALUES(?,?,?,?)";
+		public static final String READ_USER_BY_ID = "SELECT idUser,username,balance,step FROM users WHERE idUser = ? ";
+		public static final String UPDATE_USER = "UPDATE users set username= ?, balance =? ,step = ? where idUser=?  ";
 		public static final String DELETE_USER = "UPDATE users SET step = ?  WHERE idUser =? ";
 		public static final String GET_ALL_USERS = "SELECT idUser,mail,balance,step FROM users";
-		public static final String READ_USER_BY_MAIL_PASS= "SELECT idUser,mail,balance,step FROM users WHERE mail = ? and mdp=? ";
-		public static final String READ_USER_BY_MAIL= "SELECT idUser,mail,balance,step,mdp FROM users WHERE mail = ?";
+		public static final String READ_USER_BY_MAIL_PASS= "SELECT idUser,username,balance,step FROM users WHERE username = ? and password=? ";
+		public static final String READ_USER_BY_MAIL= "SELECT idUser,username,balance,step,password FROM users WHERE username = ?";
 		// Transactions
 		
 		public static final String UPDATE_USER_BALANCE="UPDATE users set balance = ? WHERE idUser = ?";

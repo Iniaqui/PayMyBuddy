@@ -6,27 +6,28 @@ import java.util.Collection;
 
 public class User  {
 	protected int userId;
-	protected String mail;
+	
+	protected String username;
 	protected float balance ;
 	protected boolean status;
-	protected String mdp ;
+	protected String password ;
 
 
 	public int getUserId() {
 		return userId;
 	}
 	public String getMail() {
-		return mail;
+		return username;
 	}
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public void setMail(String mail) {
-		this.mail = mail;
+		this.username = mail;
 	}
 	public float getBalance() {
 		return balance;
-	}
+	} 
 	public void setBalance(float balance) {
 		this.balance = balance;
 	}
@@ -37,10 +38,10 @@ public class User  {
 		this.status = status;
 	}
 	public String getMdp() {
-		return mdp;
+		return password;
 	}
 	public void setMdp(String mdp) {
-		this.mdp = mdp;
+		this.password = mdp;
 	}
 
 	

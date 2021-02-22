@@ -23,8 +23,8 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_USER_FRIEND);
-			ps.setInt(1,data.getIdFriend());
-			ps.setInt(2, data.getIdUser());
+			ps.setInt(2,data.getIdFriend());
+			ps.setInt(1, data.getIdUser());
 			int ligne  = ps.executeUpdate();
 			if(ligne>0) {
 				res = true;

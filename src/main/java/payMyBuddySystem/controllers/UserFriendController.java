@@ -33,7 +33,7 @@ public class  UserFriendController {
 				&& !request.getParameter("mailFriend").isEmpty() ? request.getParameter("mailFriend") 
 						: null;
 			
-		
+		 
 		UserFriend newUserFriend= new UserFriend();
 		boolean result  = userFriendServices.saveUserFriend(newUserFriend,mail,mdp,mailFriend);
 		if(result) {

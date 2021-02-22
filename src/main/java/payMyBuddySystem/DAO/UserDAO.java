@@ -136,14 +136,20 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 			select.setString(1, mail);
 			ResultSet res = select.executeQuery();
 			if(res.next()) {
+				System.out.println("Un utilisateur trouvé");
 				if(SecurityConfig.check(mdp, res.getString(5))) {
+					System.out.println("Mot de passa correct");
 					u= new User();
 					System.out.println("Valeur trouvé ");
-					u = new User();
 					u.setMail(res.getString(2));
+					
 					u.setBalance(res.getFloat(3));
 					u.setStatus(res.getBoolean(4));
 					u.setUserId(res.getInt(1));
+					System.out.println(u);
+					if(u!=null) {
+						System.out.println("Je retourne une valeur non nulle au niveau du DAO ");
+					}
 				}
 			
 				
@@ -157,7 +163,7 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		}
 		return u;
 	}
-	public User getUserByMail(String mail) {
+	public User getUserByMail(String mail) { 
 		Connection con = null;
 		User u= null;
 		

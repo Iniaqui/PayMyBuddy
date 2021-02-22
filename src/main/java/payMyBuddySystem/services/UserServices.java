@@ -1,25 +1,32 @@
 package payMyBuddySystem.services;
 
 
+import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
-import javax.security.auth.message.AuthException;
-
-
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import payMyBuddySystem.DAO.UserDAO;
 import payMyBuddySystem.factory.DAOFactory;
 import payMyBuddySystem.models.User;
-import payMyBuddySystem.models.UserModel;
 import payMyBuddySystem.security.SecurityConfig;
 
 @Service
-public class UserServices   {
+public class UserServices   implements UserDetailsService{
 	UserDAO userDAO = new UserDAO();
+	 /* @Bean
+	    public BCryptPasswordEncoder passwordEncode() {
+	        return new BCryptPasswordEncoder();
+	    }*/
+	  
 	public boolean saveUser(User u ) throws Exception {
-		u.setMdp(SecurityConfig.getSaltedHash(u.getMdp()));
+		//u.setMdp(SecurityConfig.getSaltedHash(u.getMdp()));
+		u.setMdp(new BCryptPasswordEncoder().encode(u.getMdp()));
 		boolean isSaved = DAOFactory.getInstanceDAO("User").create(u);
 		return isSaved;
 		
@@ -28,6 +35,9 @@ public class UserServices   {
 	public User getUserByMailAndPass(String mail,String mdp) {
 		// TODO Auto-generated method stub
 		User u= userDAO.getUserByMail(mail,mdp);
+		if(u!=null) {
+			System.out.println("Je retourne une valeur non nulle");
+		}
 		return u;
 	}
 
@@ -49,6 +59,23 @@ public class UserServices   {
 		
 		boolean isDeleted = DAOFactory.getInstanceDAO("User").delete(id);
 		return isDeleted;
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		// TODO Auto-generated method stub
+		User user = userDAO.getUserByMail(username);
+		
+		        if(user == null)
+		
+		        {
+		
+		            throw new UsernameNotFoundException(username);
+		
+		        }
+		
+		        return new org.springframework.security.core.userdetails.User(user.getMail(), user.getMdp(), Collections.emptyList());
+		
 	}
 
 
