@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import payMyBuddySystem.models.User;
 import payMyBuddySystem.models.UserModel;
+import payMyBuddySystem.security.GetUserToken;
 import payMyBuddySystem.services.UserServices;
 
 @RestController
@@ -42,6 +43,8 @@ public class userController {
 
 	@PutMapping("/update")
 	public ResponseEntity<User> updateUser(HttpServletRequest request, @RequestBody User u) {
+		String username = GetUserToken.getUserFromToken();
+		System.out.println(username);
 		User newUser = null;
 		boolean result = userServices.updateUser(u);
 		if (result) {
@@ -53,14 +56,16 @@ public class userController {
 
 	@DeleteMapping("/delete")
 	public ResponseEntity<User> deleteUser(HttpServletRequest request) {
+		String username = GetUserToken.getUserFromToken();
+		System.out.println(username);
 		boolean result = false;
-		String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
+		/*String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
 				? request.getParameter("mail")
 				: null;
 		String mdp = request.getParameter("mdp") != null && !request.getParameter("mdp").isEmpty()
 				? request.getParameter("mdp")
-				: null;
-		User u = userServices.getUserByMailAndPass(mail, mdp);
+				: null;*/
+		User u = userServices.getUserByMail(username);
 		if (u != null) {
 			System.out.println(u.getUserId());
 			result = userServices.deleteUser(u.getUserId());
@@ -80,13 +85,15 @@ public class userController {
 	@GetMapping("/user")
 	@ResponseBody
 	public User getUser(HttpServletRequest request) {
-		String mail = request.getParameter("mail")!=null
+		String username = GetUserToken.getUserFromToken();
+		System.out.println(username);
+		/*String mail = request.getParameter("mail")!=null
 				&& !request.getParameter("mail").isEmpty() ? request.getParameter("mail") 
 						: null;
 		String mdp = request.getParameter("mdp")!=null
 				&& ! request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-				: null;
-		return userServices.getUserByMailAndPass(mail, mdp);
+				: null;*/
+		return userServices.getUserByMail(username);
 	}
 
 	@GetMapping

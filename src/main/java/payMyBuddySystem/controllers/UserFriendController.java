@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import payMyBuddySystem.models.UserFriend;
+import payMyBuddySystem.security.GetUserToken;
 import payMyBuddySystem.services.UserFriendServices;
 
 @RestController
@@ -23,19 +24,15 @@ public class  UserFriendController {
 	
 	@PostMapping("/userFriend/create")
 	public ResponseEntity<UserFriend> createUserFriend(HttpServletRequest request ) {
-		String mail = request.getParameter("mail")!=null
-				&& !request.getParameter("mail").isEmpty() ? request.getParameter("mail") 
-						: null;
-		String mdp = request.getParameter("mdp")!=null
-				&& !request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-						: null;
+		
+		
 		String mailFriend = request.getParameter("mailFriend")!=null
 				&& !request.getParameter("mailFriend").isEmpty() ? request.getParameter("mailFriend") 
 						: null;
 			
 		 
 		UserFriend newUserFriend= new UserFriend();
-		boolean result  = userFriendServices.saveUserFriend(newUserFriend,mail,mdp,mailFriend);
+		boolean result  = userFriendServices.saveUserFriend(newUserFriend,GetUserToken.getUserFromToken(),mailFriend);
 		if(result) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 			
@@ -50,25 +47,21 @@ public class  UserFriendController {
 		String mailUser = request.getParameter("mailUser") != null
 							&& ! request.getParameter("mailUser").isEmpty() ? request.getParameter("mailUser")
 								:null;
-		String mdp = request.getParameter("mdp")!=null
-				&& !request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-						: null;
-		
-		return  userFriendServices.getAllFriendByUser(mailUser, mdp);				
+		return  userFriendServices.getAllFriendByUser(GetUserToken.getUserFromToken());				
 		
 	}
 	
 	@DeleteMapping("/userFriend/delete")
 	public ResponseEntity<UserFriend> deleteUserFriend(HttpServletRequest request){
-		String mailUser =request.getParameter("mailUser") != null
-				&& ! request.getParameter("mailUser").isEmpty() ? request.getParameter("mailUser")
+		String mailFriend =request.getParameter("mailFriend") != null
+				&& ! request.getParameter("mailFriend").isEmpty() ? request.getParameter("mailFriend")
 						:null;
 				
 		String idUserFriend =request.getParameter("idUserFriend") != null
 				&& ! request.getParameter("idUserFriend").isEmpty() ? request.getParameter("idUserFriend")
 						:null;
-		
-		boolean result = userFriendServices.deleteUserFriend(idUserFriend);
+		GetUserToken.getUserFromToken();
+		boolean result = userFriendServices.deleteUserFriend(GetUserToken.getUserFromToken(),mailFriend);
 		if(result) {
 			return new ResponseEntity<>(HttpStatus.ACCEPTED);
 		}

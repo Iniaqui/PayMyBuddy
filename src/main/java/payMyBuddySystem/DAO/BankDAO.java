@@ -119,7 +119,7 @@ public class BankDAO  implements DAO<Bank>{
 		return null;
 	}
 
-	public ArrayList<Bank> getBankByMail(String mail,String mdp) {
+	public ArrayList<Bank> getBankByMail(String mail) {
 		Connection con = null;
 		ArrayList<Bank> bankOfUser= new ArrayList<Bank>();
 		try {
@@ -129,7 +129,7 @@ public class BankDAO  implements DAO<Bank>{
 			ps.setString(1, mail);
 			ResultSet res  = ps.executeQuery();
 			if(res.next()) {
-				if(SecurityConfig.check(mdp, res.getString(5))) {
+				
 					int idUser = res.getInt(1);
 					PreparedStatement bankPs = con.prepareStatement(DBConstants.READ_BANK_BY_MAIL);//SELECT idBank, iban ,swift,acount  FROM bank WHERE idUser = ?
 					bankPs.setInt(1, idUser);
@@ -143,7 +143,6 @@ public class BankDAO  implements DAO<Bank>{
 						bankOfUser.add(bank);
 					}
 					dataBaseConfig.closePreparedStatement(bankPs);
-				}
 				
 			}
 			else {

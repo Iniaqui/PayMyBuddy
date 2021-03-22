@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>BankServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payMyBuddy</a> &gt; <a href="index.source.html" class="el_package">payMyBuddySystem.services</a> &gt; <span class="el_source">BankServices.java</span></div><h1>BankServices.java</h1><pre class="source lang-java linenums">package payMyBuddySystem.services;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Service;
+
+import payMyBuddySystem.DAO.BankDAO;
+import payMyBuddySystem.DAO.UserDAO;
+import payMyBuddySystem.factory.DAOFactory;
+import payMyBuddySystem.models.Bank;
+import payMyBuddySystem.models.User;
+@Service
+<span class="fc" id="L13">public class BankServices {</span>
+<span class="fc" id="L14">	UserDAO userDAO = new UserDAO();</span>
+<span class="fc" id="L15">	BankDAO bankDAO = new BankDAO();</span>
+	public boolean createBank(Bank bank,String mail) {
+<span class="nc" id="L17">		bank.setIdUser(findUser(mail));</span>
+<span class="nc" id="L18">		boolean isCreated =false;</span>
+<span class="nc" id="L19">		isCreated = DAOFactory.getInstanceDAO(&quot;Bank&quot;).create(bank);</span>
+<span class="nc" id="L20">		return isCreated;</span>
+	}
+	private int findUser(String mail) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L24">		User u = userDAO.getUserByMail(mail);</span>
+		
+<span class="nc" id="L26">		return u.getUserId();</span>
+	}
+	public boolean updateBank(Bank bank) {
+<span class="nc" id="L29">		boolean isUpdated =false;</span>
+<span class="nc" id="L30">		isUpdated = DAOFactory.getInstanceDAO(&quot;Bank&quot;).update(bank);</span>
+<span class="nc" id="L31">		return isUpdated;</span>
+	}
+	public boolean deleteBank(int id) {
+<span class="nc" id="L34">		boolean isDeleted=false;</span>
+<span class="nc" id="L35">		isDeleted = DAOFactory.getInstanceDAO(&quot;Bank&quot;).delete(id);</span>
+<span class="nc" id="L36">		return isDeleted;</span>
+	}
+	public Bank readBank(int id) {
+<span class="nc" id="L39">		Bank bank = (Bank) DAOFactory.getInstanceDAO(&quot;Bank&quot;).read(id);</span>
+<span class="nc" id="L40">		return bank;</span>
+	}
+	public ArrayList&lt;Bank&gt; getBankByMail(String mail) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L44">		ArrayList&lt;Bank&gt; listeBankOfUser = bankDAO.getBankByMail(mail);</span>
+<span class="nc" id="L45">		return listeBankOfUser;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

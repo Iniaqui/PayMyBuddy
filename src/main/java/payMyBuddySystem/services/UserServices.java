@@ -15,6 +15,7 @@ import payMyBuddySystem.DAO.UserDAO;
 import payMyBuddySystem.factory.DAOFactory;
 import payMyBuddySystem.models.User;
 import payMyBuddySystem.security.SecurityConfig;
+import payMyBuddySystem.security.WebSecurityConfig;
 
 @Service
 public class UserServices   implements UserDetailsService{
@@ -26,7 +27,8 @@ public class UserServices   implements UserDetailsService{
 	  
 	public boolean saveUser(User u ) throws Exception {
 		//u.setMdp(SecurityConfig.getSaltedHash(u.getMdp()));
-		u.setMdp(new BCryptPasswordEncoder().encode(u.getMdp()));
+		u.setMdp( WebSecurityConfig.passwordEncoder().encode(u.getMdp()));
+		
 		boolean isSaved = DAOFactory.getInstanceDAO("User").create(u);
 		return isSaved;
 		
@@ -76,6 +78,11 @@ public class UserServices   implements UserDetailsService{
 		
 		        return new org.springframework.security.core.userdetails.User(user.getMail(), user.getMdp(), Collections.emptyList());
 		
+	}
+
+	public User getUserByMail(String username) {
+		// TODO Auto-generated method stub
+		return userDAO.getUserByMail(username);
 	}
 
 

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserFriendServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payMyBuddy</a> &gt; <a href="index.source.html" class="el_package">payMyBuddySystem.services</a> &gt; <span class="el_source">UserFriendServices.java</span></div><h1>UserFriendServices.java</h1><pre class="source lang-java linenums">package payMyBuddySystem.services;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Service;
+
+import payMyBuddySystem.DAO.UserDAO;
+import payMyBuddySystem.DAO.UserFriendDAO;
+import payMyBuddySystem.factory.DAOFactory;
+import payMyBuddySystem.models.User;
+import payMyBuddySystem.models.UserFriend;
+
+@Service
+<span class="fc" id="L14">public class UserFriendServices {</span>
+<span class="fc" id="L15">	UserDAO userDAO = new UserDAO();</span>
+<span class="fc" id="L16">	UserFriendDAO userFriendDAO = new UserFriendDAO();</span>
+	
+	public boolean saveUserFriend(UserFriend userFriend,String mail,String mailFriend) {
+<span class="fc" id="L19">		boolean isSaved = false;</span>
+		//Obtenir l'id de l'ami 
+<span class="fc" id="L21">		userFriend.setIdFriend(getUserFriend(mailFriend));</span>
+		// Check les informations de l'utilisation et identifier l'id user  
+<span class="fc" id="L23">		userFriend.setIdUser(getUser(mail));</span>
+<span class="fc" id="L24">		System.out.println(&quot;idUser &quot;+ userFriend.getIdUser() + &quot;\n idFriend &quot;+ userFriend.getIdFriend());</span>
+<span class="fc" id="L25">		isSaved = DAOFactory.getInstanceDAO(&quot;UserFriend&quot;).create(userFriend);</span>
+<span class="fc" id="L26">		return isSaved;</span>
+	}
+	/*public HashMap&lt;int,String&gt; listeOfUserFriend(){
+		
+	}*/
+
+	public ArrayList&lt;String&gt; getAllFriendByUser(String mailUser) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L34">		int idUser = getUser(mailUser);</span>
+		
+<span class="nc" id="L36">		return userFriendDAO.getAllUserFriend(idUser);</span>
+	}
+
+	public boolean deleteUserFriend(String username , String mailFriend) {
+		
+<span class="nc" id="L41">		User u  = userDAO.getUserByMail(username);</span>
+<span class="nc" id="L42">		User friend = userDAO.getUserByMail(mailFriend);</span>
+		// TODO Auto-generated method stub
+<span class="nc" id="L44">		return userFriendDAO.deletUserFriend(u.getUserId(), friend.getUserId());</span>
+	}
+	public int  getUserFriend(String mailFriend) {
+<span class="fc" id="L47">	User u = userDAO.getUserByMail(mailFriend);</span>
+			
+<span class="fc" id="L49">	return u.getUserId(); </span>
+	}
+	public int getUser(String mail) {
+<span class="fc" id="L52">	User u = userDAO.getUserByMail(mail);</span>
+			
+<span class="fc" id="L54">			return u.getUserId();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

@@ -19,30 +19,38 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		Connection con = null;
 		int ligne =0;
 		boolean resu=false;
-		try {
-			con = dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_USER);
-			ps.setString(1,data.getMail());
-			ps.setString(2,data.getMdp());
-			ps.setFloat(3, data.getBalance());
-			ps.setBoolean(4,data.isStatus());
-		    ligne = ps.executeUpdate();
-		    System.out.println(ligne);
-		    dataBaseConfig.closePreparedStatement(ps);
-		    if(ligne>0) {
-		    	resu = true;
-		    }
+		User user = getUserByMail(data.getMail());
+		if(user==null) {
+			System.out.println("J'entre dedans ");
+			try {
+				con = dataBaseConfig.getConnection();
+				PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_USER);
+				ps.setString(1,data.getMail());
+				ps.setString(2,data.getMdp());
+				ps.setFloat(3, data.getBalance());
+				ps.setBoolean(4,data.isStatus());
+			    ligne = ps.executeUpdate();
+			    System.out.println(ligne);
+			    dataBaseConfig.closePreparedStatement(ps);
+			    if(ligne>0) {
+			    	resu = true;
+			    }
+			}
+			catch(Exception e) {
+				System.out.println("Error , the saving of user fails ");
+				
+			}
+			finally {
+				dataBaseConfig.closeConnection(con);
+				  System.out.println(resu);
+				return resu;
+				
+			}
 		}
-		catch(Exception e) {
-			System.out.println("Error , the saving of user fails ");
-			
-		}
-		finally {
-			dataBaseConfig.closeConnection(con);
-			  System.out.println(resu);
+		else {
 			return resu;
-			
 		}
+		
 		
 		// TODO Auto-generated method stub
 		
@@ -137,7 +145,7 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 			ResultSet res = select.executeQuery();
 			if(res.next()) {
 				System.out.println("Un utilisateur trouvé");
-				if(SecurityConfig.check(mdp, res.getString(5))) {
+				System.out.println(res.getString(5));
 					System.out.println("Mot de passa correct");
 					u= new User();
 					System.out.println("Valeur trouvé ");
@@ -150,13 +158,13 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 					if(u!=null) {
 						System.out.println("Je retourne une valeur non nulle au niveau du DAO ");
 					}
-				}
+				
 			
 				
 			}
 			dataBaseConfig.closePreparedStatement(select);
 		}catch(Exception e ){
-			System.out.println("No user found of data");
+			System.out.println("No user found of data of User ");
 		}finally {
 			
 			dataBaseConfig.closeConnection(con);

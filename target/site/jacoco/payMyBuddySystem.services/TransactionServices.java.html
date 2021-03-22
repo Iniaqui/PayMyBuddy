@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionServices.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payMyBuddy</a> &gt; <a href="index.source.html" class="el_package">payMyBuddySystem.services</a> &gt; <span class="el_source">TransactionServices.java</span></div><h1>TransactionServices.java</h1><pre class="source lang-java linenums">package payMyBuddySystem.services;
+
+import java.util.ArrayList;
+
+import org.springframework.stereotype.Service;
+
+import payMyBuddySystem.DAO.TransactionDAO;
+import payMyBuddySystem.DAO.UserDAO;
+import payMyBuddySystem.factory.DAOFactory;
+import payMyBuddySystem.models.Transaction;
+import payMyBuddySystem.models.User;
+@Service
+<span class="fc" id="L13">public class TransactionServices {</span>
+<span class="fc" id="L14">	TransactionDAO transDAO= new TransactionDAO();</span>
+<span class="fc" id="L15">	UserDAO userDAO = new UserDAO();</span>
+	public boolean saveTransaction(String mail,Transaction trans) {
+		
+<span class="fc" id="L18">		boolean isSaved = false;</span>
+<span class="fc" id="L19">		User u= userDAO.getUserByMail(mail);</span>
+<span class="fc" id="L20">		User receiver = userDAO.getUserByMail(trans.getMailReceiver());</span>
+<span class="pc bpc" id="L21" title="2 of 4 branches missed.">		if(u!= null &amp;&amp; receiver != null) {</span>
+<span class="fc" id="L22">			trans.setIdReceiver(receiver.getUserId());</span>
+			
+<span class="fc" id="L24">			trans.setIdSender(u.getUserId());</span>
+<span class="fc" id="L25">			trans.setFees(calculateFees(trans));</span>
+<span class="fc" id="L26">			System.out.println(&quot;Sender &quot;+ trans.getIdSender());</span>
+<span class="fc" id="L27">			System.out.println(&quot;Receiver &quot;+ trans.getIdReceiver());</span>
+<span class="fc" id="L28">			System.out.println(&quot;IdMotif&quot; + trans.getIdMotif());</span>
+<span class="fc" id="L29">			isSaved = DAOFactory.getInstanceDAO(&quot;Trans&quot;).create(trans);</span>
+		}
+		
+<span class="fc" id="L32">		return isSaved;</span>
+	}
+	public Transaction getTransaction(int id) {
+<span class="nc" id="L35">		return (Transaction) DAOFactory.getInstanceDAO(&quot;Trans&quot;).read(id);</span>
+	}
+	public ArrayList&lt;Transaction&gt; getAllTransactionByUser(String mailUser) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L39">		User u = userDAO.getUserByMail(mailUser);</span>
+<span class="nc" id="L40">		ArrayList&lt;Transaction &gt; listeTransactions = new ArrayList&lt;Transaction&gt;();</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">		if(u!=null) {</span>
+<span class="nc" id="L42">			 listeTransactions = transDAO.readByMail(u);</span>
+		}
+		
+<span class="nc" id="L45">		return listeTransactions;</span>
+	}
+	public float calculateFees(Transaction trans) {
+<span class="fc" id="L48">		float balanceTransaction = trans.getAmount();</span>
+<span class="fc" id="L49">		float fees = (float) ((balanceTransaction *0.5)/100);</span>
+<span class="fc" id="L50">		return fees;</span>
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

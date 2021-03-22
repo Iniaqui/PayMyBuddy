@@ -13,15 +13,19 @@ import payMyBuddySystem.models.User;
 public class TransactionServices {
 	TransactionDAO transDAO= new TransactionDAO();
 	UserDAO userDAO = new UserDAO();
-	public boolean saveTransaction(String mail , String mdp,Transaction trans) {
+	public boolean saveTransaction(String mail,Transaction trans) {
 		
 		boolean isSaved = false;
-		User u= userDAO.getUserByMail(mail, mdp);
+		User u= userDAO.getUserByMail(mail);
 		User receiver = userDAO.getUserByMail(trans.getMailReceiver());
 		if(u!= null && receiver != null) {
 			trans.setIdReceiver(receiver.getUserId());
+			
 			trans.setIdSender(u.getUserId());
 			trans.setFees(calculateFees(trans));
+			System.out.println("Sender "+ trans.getIdSender());
+			System.out.println("Receiver "+ trans.getIdReceiver());
+			System.out.println("IdMotif" + trans.getIdMotif());
 			isSaved = DAOFactory.getInstanceDAO("Trans").create(trans);
 		}
 		
@@ -30,12 +34,12 @@ public class TransactionServices {
 	public Transaction getTransaction(int id) {
 		return (Transaction) DAOFactory.getInstanceDAO("Trans").read(id);
 	}
-	public ArrayList<Transaction> getAllTransactionByUser(String mailUser,String mdp) {
+	public ArrayList<Transaction> getAllTransactionByUser(String mailUser) {
 		// TODO Auto-generated method stub
-		User u = userDAO.getUserByMail(mailUser, mdp);
+		User u = userDAO.getUserByMail(mailUser);
 		ArrayList<Transaction > listeTransactions = new ArrayList<Transaction>();
 		if(u!=null) {
-			 listeTransactions = transDAO.readByMail(mailUser);
+			 listeTransactions = transDAO.readByMail(u);
 		}
 		
 		return listeTransactions;

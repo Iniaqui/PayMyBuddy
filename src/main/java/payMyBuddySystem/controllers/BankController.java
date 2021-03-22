@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import payMyBuddySystem.models.Bank;
+import payMyBuddySystem.security.GetUserToken;
 import payMyBuddySystem.services.BankServices;
 
 @RestController
@@ -24,14 +25,12 @@ public class BankController {
 	
 	@PostMapping("/ajout")
 	public ResponseEntity<Bank> ajouterBank(@RequestBody Bank b,HttpServletRequest request){
-		String mail = request.getParameter("mail")!=null
-				&& !request.getParameter("mail").isEmpty() ? request.getParameter("mail") 
-						: null;
-		String mdp = request.getParameter("mdp")!=null
-				&& !request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-						: null;
 		
-		boolean isCreated = bankServices.createBank(b,mail,mdp);
+		/*String mdp = request.getParameter("mdp")!=null
+				&& !request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
+						: null;*/
+		
+		boolean isCreated = bankServices.createBank(b,GetUserToken.getUserFromToken());
 		if(isCreated) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
@@ -42,13 +41,9 @@ public class BankController {
 	
 	@GetMapping("/user")
 	public ArrayList<Bank> getUserBank(HttpServletRequest request){
-		String mail = request.getParameter("mail")!=null
-				&& !request.getParameter("mail").isEmpty() ? request.getParameter("mail") 
-						: null;
-		String mdp = request.getParameter("mdp")!=null
-				&& !request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-						: null;
-		return bankServices.getBankByMail(mail,mdp);
+		
+		
+		return bankServices.getBankByMail(GetUserToken.getUserFromToken());
 	}
 
 }

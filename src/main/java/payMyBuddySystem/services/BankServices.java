@@ -13,15 +13,15 @@ import payMyBuddySystem.models.User;
 public class BankServices {
 	UserDAO userDAO = new UserDAO();
 	BankDAO bankDAO = new BankDAO();
-	public boolean createBank(Bank bank,String mail,String mdp) {
-		bank.setIdUser(findUser(mail,mdp));
+	public boolean createBank(Bank bank,String mail) {
+		bank.setIdUser(findUser(mail));
 		boolean isCreated =false;
 		isCreated = DAOFactory.getInstanceDAO("Bank").create(bank);
 		return isCreated;
 	}
-	private int findUser(String mail, String mdp) {
+	private int findUser(String mail) {
 		// TODO Auto-generated method stub
-		User u = userDAO.getUserByMail(mail, mdp);
+		User u = userDAO.getUserByMail(mail);
 		
 		return u.getUserId();
 	}
@@ -39,9 +39,9 @@ public class BankServices {
 		Bank bank = (Bank) DAOFactory.getInstanceDAO("Bank").read(id);
 		return bank;
 	}
-	public ArrayList<Bank> getBankByMail(String mail,String mdp) {
+	public ArrayList<Bank> getBankByMail(String mail) {
 		// TODO Auto-generated method stub
-		ArrayList<Bank> listeBankOfUser = bankDAO.getBankByMail(mail,mdp);
+		ArrayList<Bank> listeBankOfUser = bankDAO.getBankByMail(mail);
 		return listeBankOfUser;
 	}
 	

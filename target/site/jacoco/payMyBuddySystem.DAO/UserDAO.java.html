@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserDAO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">payMyBuddy</a> &gt; <a href="index.source.html" class="el_package">payMyBuddySystem.DAO</a> &gt; <span class="el_source">UserDAO.java</span></div><h1>UserDAO.java</h1><pre class="source lang-java linenums">package payMyBuddySystem.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import payMyBuddy.config.DataBaseConfig;
+import payMyBuddySystem.constants.DBConstants;
+import payMyBuddySystem.models.User;
+import payMyBuddySystem.models.UserModel;
+import payMyBuddySystem.security.SecurityConfig;
+
+<span class="fc" id="L15">public class UserDAO implements DAO&lt;User&gt; {</span>
+<span class="fc" id="L16">DataBaseConfig dataBaseConfig = new DataBaseConfig();</span>
+	
+	public boolean create(User data) {
+<span class="fc" id="L19">		Connection con = null;</span>
+<span class="fc" id="L20">		int ligne =0;</span>
+<span class="fc" id="L21">		boolean resu=false;</span>
+<span class="fc" id="L22">		User user = getUserByMail(data.getMail());</span>
+<span class="pc bpc" id="L23" title="1 of 2 branches missed.">		if(user==null) {</span>
+<span class="fc" id="L24">			System.out.println(&quot;J'entre dedans &quot;);</span>
+			try {
+<span class="fc" id="L26">				con = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L27">				PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_USER);</span>
+<span class="fc" id="L28">				ps.setString(1,data.getMail());</span>
+<span class="fc" id="L29">				ps.setString(2,data.getMdp());</span>
+<span class="fc" id="L30">				ps.setFloat(3, data.getBalance());</span>
+<span class="fc" id="L31">				ps.setBoolean(4,data.isStatus());</span>
+<span class="fc" id="L32">			    ligne = ps.executeUpdate();</span>
+<span class="fc" id="L33">			    System.out.println(ligne);</span>
+<span class="fc" id="L34">			    dataBaseConfig.closePreparedStatement(ps);</span>
+<span class="pc bpc" id="L35" title="1 of 2 branches missed.">			    if(ligne&gt;0) {</span>
+<span class="fc" id="L36">			    	resu = true;</span>
+			    }
+			}
+<span class="nc" id="L39">			catch(Exception e) {</span>
+<span class="nc" id="L40">				System.out.println(&quot;Error , the saving of user fails &quot;);</span>
+				
+			}
+			finally {
+<span class="pc" id="L44">				dataBaseConfig.closeConnection(con);</span>
+<span class="pc" id="L45">				  System.out.println(resu);</span>
+<span class="pc" id="L46">				return resu;</span>
+				
+			}
+		}
+		else {
+<span class="nc" id="L51">			return resu;</span>
+		}
+		
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	public User read(int i) {
+<span class="nc" id="L61">		System.out.println(&quot;Je passe&quot;);</span>
+<span class="nc" id="L62">		Connection con = null;</span>
+<span class="nc" id="L63">		User user =  null;</span>
+		try {
+<span class="nc" id="L65">			con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L66">			System.out.println(&quot;System ON &quot;);</span>
+<span class="nc" id="L67">			PreparedStatement ps  = con.prepareStatement(DBConstants.READ_USER_BY_ID);</span>
+<span class="nc" id="L68">			ps.setInt(1, i);</span>
+<span class="nc" id="L69">			ResultSet rs = ps.executeQuery();</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">			if(rs.next()) {</span>
+<span class="nc" id="L71">				user= new User();</span>
+<span class="nc" id="L72">				user.setUserId(rs.getInt(1));</span>
+<span class="nc" id="L73">				user.setBalance(rs.getFloat(3));</span>
+<span class="nc" id="L74">				user.setMail(rs.getString(2));</span>
+<span class="nc" id="L75">				user.setStatus(rs.getBoolean(4));</span>
+			}
+<span class="nc" id="L77">			dataBaseConfig.closePreparedStatement(ps);</span>
+			
+<span class="nc" id="L79">		}catch(Exception e ) {</span>
+<span class="nc" id="L80">			System.out.println(&quot;No Data IN DB&quot;);</span>
+		}
+		finally {
+<span class="nc" id="L83">			dataBaseConfig.closeConnection(con);</span>
+<span class="nc" id="L84">			return user;</span>
+		}
+		
+	}
+
+	public boolean delete(int id) {
+		// TODO Auto-generated method stub
+<span class="nc" id="L91">		Connection con = null;</span>
+<span class="nc" id="L92">		int ligne = 0;</span>
+<span class="nc" id="L93">		boolean res=false;</span>
+		try {
+<span class="nc" id="L95">			con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L96">			PreparedStatement ps = con.prepareStatement(DBConstants.DELETE_USER);</span>
+<span class="nc" id="L97">			ps.setBoolean(1, false);</span>
+<span class="nc" id="L98">			ps.setInt(2, id);	</span>
+<span class="nc" id="L99">			ligne = ps.executeUpdate();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">			if(ligne&gt;0) {</span>
+<span class="nc" id="L101">				res= true;</span>
+			}
+<span class="nc" id="L103">			dataBaseConfig.closePreparedStatement(ps);</span>
+<span class="nc" id="L104">		}catch(Exception e){</span>
+<span class="nc" id="L105">			System.out.println(&quot;Error in deleting of data&quot;);</span>
+		}finally {
+<span class="nc" id="L107">			dataBaseConfig.closeConnection(con);</span>
+		}
+		
+<span class="nc" id="L110">		return res;</span>
+	}
+	public List&lt;User&gt; getAll() {
+		// TODO Auto-generated method stub
+<span class="nc" id="L114">		List&lt;User&gt; listeUser= new ArrayList&lt;User&gt;();</span>
+<span class="nc" id="L115">		Connection con = null;</span>
+		ResultSet res;
+		try {
+<span class="nc" id="L118">			con = dataBaseConfig.getConnection();</span>
+<span class="nc" id="L119">			PreparedStatement ps = con.prepareStatement(DBConstants.GET_ALL_USERS);</span>
+			// SELECT idUser,mail,balance,step FROM users
+<span class="nc" id="L121">			res=ps.executeQuery();</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">			while(res.next()) {</span>
+<span class="nc" id="L123">				User u = new User();</span>
+<span class="nc" id="L124">				u.setMail(res.getString(2));</span>
+<span class="nc" id="L125">				u.setUserId(res.getInt(1));</span>
+<span class="nc" id="L126">				u.setBalance(res.getFloat(3));</span>
+<span class="nc" id="L127">				u.setStatus(res.getBoolean(4));</span>
+<span class="nc" id="L128">				listeUser.add(u);</span>
+<span class="nc" id="L129">			}</span>
+<span class="nc" id="L130">			dataBaseConfig.closePreparedStatement(ps);</span>
+<span class="nc" id="L131">		}catch(Exception e) {</span>
+<span class="nc" id="L132">			System.out.println(&quot;Fail into to the loading file &quot;);</span>
+<span class="nc" id="L133">		}</span>
+<span class="nc" id="L134">		return listeUser;</span>
+	}
+	
+	public User getUserByMail(String mail,String mdp) {
+<span class="fc" id="L138">		Connection con = null;</span>
+<span class="fc" id="L139">		User u= null;</span>
+		
+		try {
+<span class="fc" id="L142">			con = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L143">			PreparedStatement select = con.prepareStatement(DBConstants.READ_USER_BY_MAIL);//  SELECT idUser,mail,balance,step FROM users WHERE mail = ?</span>
+<span class="fc" id="L144">			select.setString(1, mail);</span>
+<span class="fc" id="L145">			ResultSet res = select.executeQuery();</span>
+<span class="pc bpc" id="L146" title="1 of 2 branches missed.">			if(res.next()) {</span>
+<span class="fc" id="L147">				System.out.println(&quot;Un utilisateur trouvé&quot;);</span>
+<span class="fc" id="L148">				System.out.println(res.getString(5));</span>
+<span class="fc" id="L149">					System.out.println(&quot;Mot de passa correct&quot;);</span>
+<span class="fc" id="L150">					u= new User();</span>
+<span class="fc" id="L151">					System.out.println(&quot;Valeur trouvé &quot;);</span>
+<span class="fc" id="L152">					u.setMail(res.getString(2));</span>
+					
+<span class="fc" id="L154">					u.setBalance(res.getFloat(3));</span>
+<span class="fc" id="L155">					u.setStatus(res.getBoolean(4));</span>
+<span class="fc" id="L156">					u.setUserId(res.getInt(1));</span>
+<span class="fc" id="L157">					System.out.println(u);</span>
+<span class="pc bpc" id="L158" title="1 of 2 branches missed.">					if(u!=null) {</span>
+<span class="fc" id="L159">						System.out.println(&quot;Je retourne une valeur non nulle au niveau du DAO &quot;);</span>
+					}
+				
+			
+				
+			}
+<span class="fc" id="L165">			dataBaseConfig.closePreparedStatement(select);</span>
+<span class="nc" id="L166">		}catch(Exception e ){</span>
+<span class="nc" id="L167">			System.out.println(&quot;No user found of data of User &quot;);</span>
+		}finally {
+			
+<span class="fc" id="L170">			dataBaseConfig.closeConnection(con);</span>
+		}
+<span class="fc" id="L172">		return u;</span>
+	}
+	public User getUserByMail(String mail) { 
+<span class="fc" id="L175">		Connection con = null;</span>
+<span class="fc" id="L176">		User u= null;</span>
+		
+		try {
+<span class="fc" id="L179">			con = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L180">			PreparedStatement select = con.prepareStatement(DBConstants.READ_USER_BY_MAIL);//  SELECT idUser,mail,balance,step FROM users WHERE mail = ? and mdp=?</span>
+<span class="fc" id="L181">			select.setString(1, mail);</span>
+			
+<span class="fc" id="L183">			ResultSet res = select.executeQuery();</span>
+			
+<span class="fc bfc" id="L185" title="All 2 branches covered.">			if(res.next()) {</span>
+<span class="fc" id="L186">				u= new User();</span>
+<span class="fc" id="L187">				System.out.println(&quot;Valeur trouvé &quot;);</span>
+<span class="fc" id="L188">				u = new User();</span>
+<span class="fc" id="L189">				u.setMail(res.getString(2));</span>
+<span class="fc" id="L190">				u.setBalance(res.getFloat(3));</span>
+<span class="fc" id="L191">				u.setStatus(res.getBoolean(4));</span>
+<span class="fc" id="L192">				u.setUserId(res.getInt(1));</span>
+<span class="fc" id="L193">				u.setMdp(res.getString(5));</span>
+				
+			}
+			else {
+<span class="fc" id="L197">				System.out.println(&quot;Je passe par la &quot;);</span>
+			}
+<span class="fc" id="L199">			dataBaseConfig.closePreparedStatement(select);</span>
+<span class="nc" id="L200">		}catch(Exception e ){</span>
+<span class="nc" id="L201">			System.out.println(&quot;No user found of data&quot;);</span>
+		}finally {
+			
+<span class="fc" id="L204">			dataBaseConfig.closeConnection(con);</span>
+		}
+<span class="fc" id="L206">		return u;</span>
+	}
+
+
+	@Override
+	public boolean update(User data) {
+		
+<span class="fc" id="L213">		Connection con = null;</span>
+		int ligne;
+<span class="fc" id="L215">		boolean result=false;</span>
+<span class="fc" id="L216">		User u = this.getUserByMail(data.getMail(),data.getMdp());</span>
+<span class="pc bpc" id="L217" title="1 of 2 branches missed.">		if(u!= null) {</span>
+<span class="fc" id="L218">			System.out.println(&quot;J'entre dedans &quot;);</span>
+			try {
+<span class="fc" id="L220">				con = dataBaseConfig.getConnection();</span>
+<span class="fc" id="L221">				PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_USER);// &quot;UPDATE users set mail= ?,mdp = ? , balance =? ,step = ? where idUser=?  &quot;;</span>
+<span class="fc" id="L222">				ps.setString(1, data.getMail());</span>
+				
+<span class="fc" id="L224">				ps.setFloat(2,data.getBalance());</span>
+<span class="fc" id="L225">				ps.setBoolean(3, data.isStatus());</span>
+<span class="fc" id="L226">				ps.setInt(4,u.getUserId());</span>
+<span class="fc" id="L227">				ligne = ps.executeUpdate();</span>
+<span class="pc bpc" id="L228" title="1 of 2 branches missed.">				if(ligne&gt;0) {</span>
+<span class="fc" id="L229">					result=true;</span>
+				}
+<span class="fc" id="L231">				dataBaseConfig.closePreparedStatement(ps);</span>
+<span class="nc" id="L232">			}catch(Exception e ){</span>
+<span class="nc" id="L233">				System.out.println(&quot;Error in updating of data&quot;);</span>
+			}finally {
+				
+<span class="fc" id="L236">				dataBaseConfig.closeConnection(con);</span>
+<span class="fc" id="L237">			}</span>
+		}
+		else {
+<span class="nc" id="L240">			System.out.println(&quot;No user found&quot;);</span>
+		}
+		
+<span class="fc" id="L243">		return result;</span>
+		
+	}
+	
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.5.201910111838</span></div></body></html>

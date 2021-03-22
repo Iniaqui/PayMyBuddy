@@ -9,7 +9,6 @@ public class Transaction {
 	private int idReceiver;
 	@JsonIgnore
 	private int idSender;
-	@JsonIgnore
 	private int idMotif ;
 	private float fees;
 	private float amount;

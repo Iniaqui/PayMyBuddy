@@ -23,8 +23,10 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		try {
 			con = dataBaseConfig.getConnection();
 			PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_USER_FRIEND);
-			ps.setInt(2,data.getIdFriend());
+			System.out.println("idUser "+ data.getIdUser() + "\n idFriend "+ data.getIdFriend());
 			ps.setInt(1, data.getIdUser());
+			ps.setInt(2,data.getIdFriend());
+			
 			int ligne  = ps.executeUpdate();
 			if(ligne>0) {
 				res = true;
@@ -150,6 +152,32 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		return listeUserFriend;
 	}
 
-
+	public boolean deletUserFriend(int idUser , int idFriend) {
+		boolean isDelete = false ;
+		
+		Connection con = null;
+		try {
+			con = dataBaseConfig.getConnection();
+			 PreparedStatement ps = con.prepareStatement(DBConstants.DELETE_USER_FRIEND);
+			 ps.setInt(1, idUser);
+			 ps.setInt(2, idUser);
+			 ps.setInt(3, idFriend);
+			 ps.setInt(4, idFriend);
+			int ligne = ps.executeUpdate();
+			if(ligne>0) {
+				System.out.println("Suppression de la relation reussi ");
+				isDelete= true ; 
+			}
+			else {
+				System.out.println("Probelem avec la suppression ");
+			}
+		}catch(Exception e) {
+			System.out.println("DELETING ERROR ");
+		}finally {
+			dataBaseConfig.closeConnection(con);
+		}
+		// TODO Auto-generated method stub
+		return isDelete;
+	}
 	
 }

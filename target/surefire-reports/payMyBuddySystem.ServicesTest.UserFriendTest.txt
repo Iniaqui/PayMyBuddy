@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: payMyBuddySystem.ServicesTest.UserFriendTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 4.836 s - in payMyBuddySystem.ServicesTest.UserFriendTest

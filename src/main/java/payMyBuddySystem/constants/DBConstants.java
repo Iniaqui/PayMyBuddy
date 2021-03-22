@@ -26,11 +26,13 @@ public class DBConstants {
 				+ "INNER JOIN users \r\n"
 				+ "	ON users.idUser = transactions.idUserReceiver \r\n"
 				+ "    OR users.idUser = transactions.idUserSender\r\n"
-				+ " WHERE users.mail = ?; ";
+				+ " WHERE users.username = ?; ";
+		
+		public static final String READ_TRANSACTION_BY_MAIL2 = "SELECT * FROM paymybundy.transactions WHERE idUserReceiver=? OR idUserSender=?";
 		// UserFriend
 		public static final String SAVE_USER_FRIEND = "INSERT INTO userfriend(idUser,idFriend)  VALUES (? ,?)";
 		public static final String READ_USER_FRIEND = "SELECT idRelation ,idFriend, idUser FROM userfriend WHERE idUser = ? OR idFriend= ? ";
-		public static final String DELETE_USER_FRIEND = "DELETE FROM userfriend WHERE idRelation = ? ";
+		public static final String DELETE_USER_FRIEND = "DELETE  FROM paymybundy.userfriend WHERE (idUser= ? OR idFriend = ?) AND( idUser=? OR idFriend=?) ";
 		public static final String READ_USER_FRIEND_BY_MAIL = "SELECT idUser,mail,balance,step FROM users WHERE mail = ?";
 		
 		// MOTIF

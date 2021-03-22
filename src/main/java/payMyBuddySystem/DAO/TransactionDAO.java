@@ -31,9 +31,11 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 			ResultSet resultUserReceiver =receiver.executeQuery();
 			
 			if(resultUserReceiver.next() && resultUserSender.next() ) {
+				System.out.println("Verification des soldes ");
 				float balancerSender=resultUserSender.getFloat(3);
 				float balanceReceiver =resultUserReceiver.getFloat(3);
 				if(balancerSender>=(data.getAmount()+data.getFees())) {
+					System.out.println("Deducation des soldes ");
 					float newBalanceSender = balancerSender-data.getAmount()-data.getFees();
 					float newBalanceReceiver = balanceReceiver+data.getAmount();
 					
@@ -44,13 +46,13 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 						psUpdateReceiver.setFloat(1,newBalanceReceiver );
 						psUpdateReceiver.setInt(2, data.getIdReceiver());
 						int lignereceiver = psUpdateReceiver.executeUpdate();
-					
+						System.out.println("Mise à jour de la table User reussi " + lignereceiver);
 						// MISE A JOUR DE LA BALANCE EXPEDITEUR 
 						PreparedStatement psUpdateSender = con.prepareStatement(DBConstants.UPDATE_USER_BALANCE);
 						psUpdateSender.setFloat(1, newBalanceSender);
 						psUpdateSender.setInt(2, data.getIdSender());
 						int ligneSender = psUpdateSender.executeUpdate();
-					
+						System.out.println("Mise à jour de la table UserSender reussi " + ligneSender);
 						// INSERTION DE LA TRANSACTIONS DANS LA TABLE TRANSACTIONS
 						PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TRANSACTION);
 						/*START TRANSACTION;"
@@ -66,8 +68,9 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 						ps.setFloat(4, data.getFees());
 						ps.setFloat(5, data.getAmount());
 						ps.setString(6, data.getTransactionType());
-						
+						System.out.println(data.getIdReceiver() +" \n" + data.getIdSender() +"\n " +data.getAmount() +"\n "+data.getIdMotif()+"\n "+ data.getFees()+ "\n " +data.getTransactionType());
 						int ligne = ps.executeUpdate();
+						System.out.println("Mise à jour de la table TRansaction reussi "+ ligne);
 						// VERIFICATION DE LA REUSISTE DES TRANSCATIONS 
 						if(ligne>0 && ligneSender>0 && lignereceiver >0 ) {
 							System.out.println("Transaction reussi");
@@ -157,13 +160,13 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 	}
 
 
-	public ArrayList<Transaction> readByMail(String mailUser) {
+	public ArrayList<Transaction> readByMail(User u ) {
 		// TODO Auto-generated method stub
 		Connection con= null;
 		ArrayList<Transaction> listeTrans = new ArrayList<Transaction>();
 		try {
 			con= dataBaseConfig.getConnection();
-			PreparedStatement ps = con.prepareStatement(DBConstants.READ_TRANSACTIONS_BY_MAIL); /*select  transactions.idTransaction,\r\n"
+			PreparedStatement ps = con.prepareStatement(DBConstants.READ_TRANSACTION_BY_MAIL2 ); /*select  transactions.idTransaction,\r\n"
 				+ "		transactions.idUserReceiver,\r\n"
 				+ "        transactions.idUserSender,\r\n"
 				+ "        transactions.idMotif,\r\n"
@@ -175,7 +178,8 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 				+ "	ON users.idUser = transactions.idUserReceiver \r\n"
 				+ "    OR users.idUser = transactions.idUserSender\r\n"
 				+ " WHERE users.mail = ?;*/
-			ps.setString(1, mailUser);
+			ps.setInt(1, u.getUserId());
+			ps.setInt(2, u.getUserId());
 			
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()) {
@@ -200,7 +204,7 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 			
 			dataBaseConfig.closePreparedStatement(ps);
 		}catch(Exception e ) {
-			System.out.println("No Data IN DB");
+			System.out.println("No Data IN DB Transacction");
 		}
 		finally {
 			dataBaseConfig.closeConnection(con);

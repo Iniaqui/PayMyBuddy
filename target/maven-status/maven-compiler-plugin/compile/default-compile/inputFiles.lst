@@ -11,11 +11,17 @@ C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\services\UserFriendServices.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\controllers\MotifController.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\models\UserModel.java
+C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\security\GetUserToken.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\services\UserServices.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\controllers\TransactionController.java
+C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\security\AuthentificationFilter.java
+C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\security\WebSecurityConfig.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\DAO\MotifDAO.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\factory\DAOFactory.java
+C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\controllers\BankController.java
+C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\security\AuthorizationFilter.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\models\Bank.java
+C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\security\SecurityConfig.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\DAO\UserFriendDAO.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddySystem\services\MotifServices.java
 C:\Users\maure\Desktop\Projet JAVA EE\payMyBuddy\src\main\java\payMyBuddy\config\DataBaseConfig.java

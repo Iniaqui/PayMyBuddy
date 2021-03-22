@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import payMyBuddySystem.models.Motif;
+import payMyBuddySystem.security.GetUserToken;
 import payMyBuddySystem.services.MotifServices;
 
 @RestController
@@ -28,7 +29,7 @@ public class MotifController {
 							&& ! request.getParameter("userMail").isEmpty() ? request.getParameter("userMail")
 									: null ;
 		
-		return motifServices.getAllMotifByUser(mailuser);
+		return motifServices.getAllMotifByUser(GetUserToken.getUserFromToken());
 	}
 	@PostMapping("/create")
 	public ResponseEntity<Motif> create(@RequestBody Motif m){

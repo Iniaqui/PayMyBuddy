@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.google.gson.Gson;
@@ -50,7 +51,7 @@ public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter
         	User user = new Gson().fromJson(request.getReader(), User.class);
          // User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 
-            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getMail(), user.getMdp(),new ArrayList<>()));
+            return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(),new ArrayList<>()));
 
         }
 
@@ -68,13 +69,15 @@ public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain, Authentication authentication)
 
     {
+    	 UserDetails userDetail = (UserDetails) authentication.getPrincipal();
         String token = Jwts.builder()
 
-               .setSubject(((User) authentication.getPrincipal()).getMail())
-                .setExpiration(new Date(System.currentTimeMillis() + 864_000_000))
+               .setSubject(userDetail.getUsername())
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
                 .signWith(SignatureAlgorithm.HS512, "SecretKeyToGenJWTs".getBytes())
 
                 .compact();
+        
 
         response.addHeader("Authorization","Bearer " + token);
     }

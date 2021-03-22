@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,15 +27,22 @@ public class TransactionController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<Transaction> createTransaction(HttpServletRequest request, @RequestBody Transaction transaction) {
-		String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
+		/*String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
 				? request.getParameter("mail")
 				: null;
 		String mdp = request.getParameter("mdp") != null && !request.getParameter("mdp").isEmpty()
 				? request.getParameter("mdp")
 				: null;
-		
-	
-		boolean result=transactionServices.saveTransaction(mail,mdp,transaction);
+		*/
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if (principal instanceof UserDetails) {
+		   username = ((UserDetails)principal).getUsername();
+		} else {
+		   username = principal.toString();
+		}
+		System.out.println(username);
+		boolean result=transactionServices.saveTransaction(username,transaction);
 		if(result) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
 		}
@@ -43,13 +52,17 @@ public class TransactionController {
 	}
 	@GetMapping
 	public ArrayList<Transaction> getAllTransaction(HttpServletRequest request){
-		String mailUser = request.getParameter("mailUser")!= null 
-							&& ! request.getParameter("mailUser").isEmpty() ? request.getParameter("mailUser")
-									:null;
-		String mdp = request.getParameter("mdp") != null && !request.getParameter("mdp").isEmpty()
-				? request.getParameter("mdp")
-				: null;
-		return transactionServices.getAllTransactionByUser(mailUser,mdp);
+		
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String username;
+		if (principal instanceof UserDetails) {
+		   username = ((UserDetails)principal).getUsername();
+		} else {
+		   username = principal.toString();
+		}
+		System.out.println(username);
+		
+		return transactionServices.getAllTransactionByUser(username);
 	}
 	@GetMapping("/transaction")
 	public Transaction getTransactionById(HttpServletRequest request) {
