@@ -80,6 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 
     }
 
+    @Bean
+    public static BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
    /* @Bean
     UrlBasedCorsConfigurationSource corsConfigurationSource()
 
@@ -93,9 +97,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter
 
     }*/
     
-    @Bean
-    public static BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+   
 
 }

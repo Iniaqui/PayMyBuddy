@@ -39,15 +39,6 @@ public class AuthentificationFilter extends UsernamePasswordAuthenticationFilter
         try
 
         {
-        	/*System.out.println(request.getInputStream().toString());
-        	String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
-    				? request.getParameter("mail")
-    				: null;
-    		String mdp = request.getParameter("mdp") != null && !request.getParameter("mdp").isEmpty()
-    				? request.getParameter("mdp")
-    				: null;
-        	User newUser= new User();
-        	newUser.setMail(mail);*/
         	User user = new Gson().fromJson(request.getReader(), User.class);
          // User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
 

@@ -33,7 +33,7 @@ public class DBConstants {
 		public static final String SAVE_USER_FRIEND = "INSERT INTO userfriend(idUser,idFriend)  VALUES (? ,?)";
 		public static final String READ_USER_FRIEND = "SELECT idRelation ,idFriend, idUser FROM userfriend WHERE idUser = ? OR idFriend= ? ";
 		public static final String DELETE_USER_FRIEND = "DELETE  FROM paymybundy.userfriend WHERE (idUser= ? OR idFriend = ?) AND( idUser=? OR idFriend=?) ";
-		public static final String READ_USER_FRIEND_BY_MAIL = "SELECT idUser,mail,balance,step FROM users WHERE mail = ?";
+		public static final String READ_USER_FRIEND_BY_MAIL = "SELECT idUser,username,balance,step FROM users WHERE username = ?";
 		
 		// MOTIF
 		public static final String SAVE_MOTIF = "INSERT INTO motif(descriptionMotif) VALUES( ?) ";
@@ -42,7 +42,7 @@ public class DBConstants {
 				+ "WHERE m.idMotif = t.idMotif \r\n"
 				+ "AND  (t.idUserReceiver=u.idUser OR t.idUserSender = u.idUser)\r\n"
 				+ "\r\n"
-				+ "AND u.mail = ?";
+				+ "AND u.username = ?";
 		
 		// BANK 
 		public static final String SAVE_BANK = "INSERT INTO bank(idUser,iban ,swift,acount) VALUES (?,?,?,?)";

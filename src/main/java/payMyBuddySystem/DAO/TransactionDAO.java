@@ -213,6 +213,184 @@ DataBaseConfig dataBaseConfig = new DataBaseConfig();
 		return listeTrans;
 	}
 	
+	public boolean depot(String username , Float ask ) {//Depot sur son compye PayMyBuddy
+		Connection con = null;
+		boolean res = false;
+		try {
+			con = dataBaseConfig.getConnection();
+			//Obtenons les informations de chacun des utilisateur dans cette transactions 
+			
+			PreparedStatement psUser = con.prepareStatement(DBConstants.READ_USER_BY_MAIL);
+			psUser.setString(1, username);
+			ResultSet resulSetPsUser = psUser.executeQuery();//SELECT idUser,username,balance,step,password FROM users WHERE username = ?
+			
+			if(resulSetPsUser.next()) {
+				int idUser = resulSetPsUser.getInt(1);//
+				float balance = resulSetPsUser.getFloat(3);
+				String usernameDb = resulSetPsUser.getString(2);
+				boolean step= resulSetPsUser.getBoolean(4);
+				
+				
+				// WE SEARCH THE BANK OF USER
+				PreparedStatement psBank = con.prepareStatement(DBConstants.READ_BANK_BY_MAIL);//SELECT idBank, iban ,swift,acount  FROM bank WHERE idUser = ?
+				psBank.setInt(1, idUser);
+				ResultSet resultBank = psBank.executeQuery();
+				if(resultBank.next()) {
+					String iban = resultBank.getString(2);
+					int idBank = resultBank.getInt(1);
+					String swift = resultBank.getString(3);
+					Float account = resultBank.getFloat(4);
+					
+					if(account>= ask ) {
+						
+							// DEBUT DE LA TRANSACTION 
+							con.setAutoCommit(false);
+							try {
+								//Modification de la table bank 
+								PreparedStatement save = con.prepareStatement(DBConstants.UPDATE_BANK);//UPDATE bank set iban = ? , swift = ? ,acount = ? WHERE idBank=?
+								save.setString(1, iban);
+								save.setString(2, swift);
+								save.setFloat(3, (account-ask));
+								save.setInt(4, idBank);
+								int ligne = save.executeUpdate();
+								
+								
+								//Modification de la table user
+								PreparedStatement updateBalanceUser = con.prepareStatement(DBConstants.UPDATE_USER);//"UPDATE users set username= ?, balance =? ,step = ? where idUser=?
+								updateBalanceUser.setString(1, usernameDb);
+								updateBalanceUser.setFloat(2, (balance + ask));
+								updateBalanceUser.setBoolean(3, step);
+								updateBalanceUser.setInt(4, idUser);
+								int ligneUser = updateBalanceUser.executeUpdate();
+								
+								
+								if(ligneUser>0 && ligne>0) {
+									System.out.println("Transaction Reussi");
+									res=true;
+								}
+								else {
+									con.rollback();
+								}
+								dataBaseConfig.closePreparedStatement(psBank);
+								dataBaseConfig.closePreparedStatement(psUser);
+								dataBaseConfig.closePreparedStatement(updateBalanceUser);
+								dataBaseConfig.closePreparedStatement(save);
+								con.commit();
+								
+							}catch(Exception e) {
+								con.rollback();
+							}
+						
+					}
+					else {
+						System.out.print("Fond insuffisant");
+					}
+					
+				}else {
+					System.out.println("Bank note found ");
+				}
+				
+				
+				
+			}
+			else {
+				System.out.println("No user found ");
+			}
+		}catch(Exception e) {
+			System.out.println("Error in Treatment");
+		}
+		finally {
+			dataBaseConfig.closeConnection(con);
+		}
+		
+		return res;
+	}
+	public boolean retrait(String username , Float ask ) {//Retrait de son compte 
+		Connection con = null;
+		boolean res = false;
+		try {
+			con = dataBaseConfig.getConnection();
+			//Obtenons les informations de chacun des utilisateur dans cette transactions 
+			
+			PreparedStatement psUser = con.prepareStatement(DBConstants.READ_USER_BY_MAIL);
+			psUser.setString(1, username);
+			ResultSet resulSetPsUser = psUser.executeQuery();//SELECT idUser,username,balance,step,password FROM users WHERE username = ?
+			if(resulSetPsUser.next()) {
+				int idUser = resulSetPsUser.getInt(1);//
+				float balance = resulSetPsUser.getFloat(3);
+				String usernameDb = resulSetPsUser.getString(2);
+				boolean step= resulSetPsUser.getBoolean(4);
+				
+				if(balance>= ask ) {
+					
+					PreparedStatement psBank = con.prepareStatement(DBConstants.READ_BANK_BY_MAIL);//SELECT idBank, iban ,swift,acount  FROM bank WHERE idUser = ?
+					psBank.setInt(1, idUser);
+					ResultSet resultBank = psBank.executeQuery();
+					
+					if(resultBank.next()) {
+						String iban = resultBank.getString(2);
+						int idBank = resultBank.getInt(1);
+						String swift = resultBank.getString(3);
+						Float account = resultBank.getFloat(4);
+						
+						// DEBUT DE LA TRANSACTION 
+						con.setAutoCommit(false);
+						try {
+							//Modification de la table bank 
+							PreparedStatement save = con.prepareStatement(DBConstants.UPDATE_BANK);//UPDATE bank set iban = ? , swift = ? ,acount = ? WHERE idBank=?
+							save.setString(1, iban);
+							save.setString(2, swift);
+							save.setFloat(3, (ask +account));
+							save.setInt(4, idBank);
+							int ligne = save.executeUpdate();
+							
+							
+							//Modification de la table user
+							PreparedStatement updateBalanceUser = con.prepareStatement(DBConstants.UPDATE_USER);//"UPDATE users set username= ?, balance =? ,step = ? where idUser=?
+							updateBalanceUser.setString(1, usernameDb);
+							updateBalanceUser.setFloat(2, (balance - ask));
+							updateBalanceUser.setBoolean(3, step);
+							updateBalanceUser.setInt(4, idUser);
+							int ligneUser = updateBalanceUser.executeUpdate();
+							
+							
+							if(ligneUser>0 && ligne>0) {
+								System.out.println("Transaction Reussi");
+								res=true;
+							}
+							else {
+								con.rollback();
+							}
+							dataBaseConfig.closePreparedStatement(psBank);
+							dataBaseConfig.closePreparedStatement(psUser);
+							dataBaseConfig.closePreparedStatement(updateBalanceUser);
+							dataBaseConfig.closePreparedStatement(save);
+							con.commit();
+							
+						}catch(Exception e) {
+							con.rollback();
+						}
+					}
+				}
+				else {
+					System.out.print("Fond insuffisant");
+				}
+				
+			}
+			else {
+				System.out.println("No user found ");
+			}
+		}catch(Exception e) {
+			System.out.println("Error in Treatment");
+		}
+		finally {
+			dataBaseConfig.closeConnection(con);
+		}
+		
+		return res;
+	}
+	
+	
 	
 	 
 }

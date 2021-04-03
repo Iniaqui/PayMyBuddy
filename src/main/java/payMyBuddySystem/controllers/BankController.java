@@ -45,5 +45,42 @@ public class BankController {
 		
 		return bankServices.getBankByMail(GetUserToken.getUserFromToken());
 	}
+	
+	@PostMapping("/depot")// depot sur son compte PayMyBuddy
+	public ResponseEntity<Bank> transfertVersSonCompte(HttpServletRequest request){
+		String askToString = request.getParameter("montant") != null
+				&& !request.getParameter("montant").isEmpty()
+				? request.getParameter("montant")
+						:null;
+		float ask= Float.parseFloat(askToString);
+		
+		boolean isTransfert = bankServices.depot(ask, GetUserToken.getUserFromToken());
+		if(isTransfert) {
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+	}
+	/*@PostMapping("/depotExternal")
+	p*/
+	@PostMapping("/withdraw")
+	public ResponseEntity<Bank> withdraw(HttpServletRequest request){
+		String askToString = request.getParameter("montant") != null
+				&& !request.getParameter("montant").isEmpty()
+				? request.getParameter("montant")
+						:null;
+		float ask= Float.parseFloat(askToString);
+		
+		boolean isTransfert = bankServices.retrait(GetUserToken.getUserFromToken(),ask);
+		if(isTransfert) {
+			return new ResponseEntity<>(HttpStatus.CREATED);
+		}
+		else {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		
+	}
 
 }

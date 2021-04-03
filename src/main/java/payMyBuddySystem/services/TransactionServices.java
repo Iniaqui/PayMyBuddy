@@ -50,4 +50,10 @@ public class TransactionServices {
 		return fees;
 	}
 	
+	public boolean retrait(Float ask , String username) {
+		return transDAO.retrait(username, ask);
+	}
+	public boolean depot(Float ask , String username) {
+		return transDAO.depot(username, ask);
+	}
 }

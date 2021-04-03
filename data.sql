@@ -5,7 +5,7 @@ use payMyBundy;
     DROP TABLE IF EXISTS users;
     CREATE TABLE users(
 		idUser SMALLINT unsigned NOT NULL auto_increment,
-        mail VARCHAR(50),
+        username VARCHAR(50),
         mdp VARCHAR(100) not null ,
         balance FLOAT ,
         step BOOLEAN not null,

@@ -27,13 +27,7 @@ public class TransactionController {
 	
 	@PostMapping("/create")
 	public ResponseEntity<Transaction> createTransaction(HttpServletRequest request, @RequestBody Transaction transaction) {
-		/*String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
-				? request.getParameter("mail")
-				: null;
-		String mdp = request.getParameter("mdp") != null && !request.getParameter("mdp").isEmpty()
-				? request.getParameter("mdp")
-				: null;
-		*/
+		
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String username;
 		if (principal instanceof UserDetails) {
