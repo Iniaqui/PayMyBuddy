@@ -15,4 +15,9 @@ Pour utiliser l'application
     - Ouvrez le fichier data.sql 
     - Exécuter les fichier en ligne de commande ou dans un System de Gestion de Base de Données 
     
-    - Installer PostMan pour générer les endpoints 
+    - Installer PostMan pour générer les endpoints
+
+
+# Diagramme : 
+![Capture](https://user-images.githubusercontent.com/67697346/114001828-9807e700-985c-11eb-9181-e695d26b7fc9.PNG)
+![Model](https://user-images.githubusercontent.com/67697346/114001928-b1109800-985c-11eb-823c-d3d9c8dfdc2e.PNG)
