@@ -38,7 +38,7 @@ public class BankDAO  implements DAO<Bank>{
 			dataBaseConfig.closeConnection(con);
 		}
 		return res;
-		// TODO Auto-generated method stub
+
 		
 	}
 

@@ -20,11 +20,7 @@ import payMyBuddySystem.security.WebSecurityConfig;
 @Service
 public class UserServices   implements UserDetailsService{
 	UserDAO userDAO = new UserDAO();
-	 /* @Bean
-	    public BCryptPasswordEncoder passwordEncode() {
-	        return new BCryptPasswordEncoder();
-	    }*/
-	  
+	
 	public boolean saveUser(User u ) throws Exception {
 		//u.setMdp(SecurityConfig.getSaltedHash(u.getMdp()));
 		u.setMdp( WebSecurityConfig.passwordEncoder().encode(u.getMdp()));

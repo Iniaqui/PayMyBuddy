@@ -25,9 +25,6 @@ public class MotifController {
 	@GetMapping("/user")
 	
 	public ArrayList<Motif> getAllMotif(HttpServletRequest request){
-		/*String mailuser = request.getParameter("userMail") != null
-							&& ! request.getParameter("userMail").isEmpty() ? request.getParameter("userMail")
-									: null ;*/
 		
 		return motifServices.getAllMotifByUser(GetUserToken.getUserFromToken());
 	}

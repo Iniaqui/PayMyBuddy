@@ -26,10 +26,6 @@ public class BankController {
 	@PostMapping("/ajout")
 	public ResponseEntity<Bank> ajouterBank(@RequestBody Bank b,HttpServletRequest request){
 		
-		/*String mdp = request.getParameter("mdp")!=null
-				&& !request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-						: null;*/
-		
 		boolean isCreated = bankServices.createBank(b,GetUserToken.getUserFromToken());
 		if(isCreated) {
 			return new ResponseEntity<>(HttpStatus.CREATED);
@@ -63,8 +59,7 @@ public class BankController {
 		}
 		
 	}
-	/*@PostMapping("/depotExternal")
-	p*/
+
 	@PostMapping("/withdraw")
 	public ResponseEntity<Bank> withdraw(HttpServletRequest request){
 		String askToString = request.getParameter("montant") != null

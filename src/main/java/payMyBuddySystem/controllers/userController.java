@@ -59,12 +59,6 @@ public class userController {
 		String username = GetUserToken.getUserFromToken();
 		System.out.println(username);
 		boolean result = false;
-		/*String mail = request.getParameter("mail") != null && !request.getParameter("mail").isEmpty()
-				? request.getParameter("mail")
-				: null;
-		String mdp = request.getParameter("mdp") != null && !request.getParameter("mdp").isEmpty()
-				? request.getParameter("mdp")
-				: null;*/
 		User u = userServices.getUserByMail(username);
 		if (u != null) {
 			System.out.println(u.getUserId());
@@ -87,12 +81,6 @@ public class userController {
 	public User getUser(HttpServletRequest request) {
 		String username = GetUserToken.getUserFromToken();
 		System.out.println(username);
-		/*String mail = request.getParameter("mail")!=null
-				&& !request.getParameter("mail").isEmpty() ? request.getParameter("mail") 
-						: null;
-		String mdp = request.getParameter("mdp")!=null
-				&& ! request.getParameter("mdp").isEmpty() ? request.getParameter("mdp") 
-				: null;*/
 		return userServices.getUserByMail(username);
 	}
 

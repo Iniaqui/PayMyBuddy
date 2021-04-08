@@ -25,9 +25,7 @@ public class UserFriendServices {
 		isSaved = DAOFactory.getInstanceDAO("UserFriend").create(userFriend);
 		return isSaved;
 	}
-	/*public HashMap<int,String> listeOfUserFriend(){
-		
-	}*/
+
 
 	public ArrayList<String> getAllFriendByUser(String mailUser) {
 		// TODO Auto-generated method stub
