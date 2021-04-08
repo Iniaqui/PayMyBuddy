@@ -1,4 +1,0 @@
--------------------------------------------------------------------------------
-Test set: payMyBuddySystem.ServicesTest.UserServicesTest
--------------------------------------------------------------------------------
-Tests run: 5, Failures: 0, Errors: 0, Skipped: 3, Time elapsed: 0.457 s - in payMyBuddySystem.ServicesTest.UserServicesTest
